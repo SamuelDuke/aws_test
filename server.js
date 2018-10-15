@@ -1,11 +1,25 @@
 // npm install --save express body-parser mongoose passport bcrypt-nodejs jsonwebtoken passport-jwt cors
 
 const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const apiRouter = require('./apiRouter');
 const configMain = require('./config/main');
 
 const app = express();
+
+// Connect mongoose to handle promises
+mongoose.Promise = global.Promise;
+mongoose.set('useCreateIndex', true);
+
+// Database Setup
+mongoose.connection.openUri(configMain.database, {useNewUrlParser: true});
+
+// Setup middleware for all Express requests
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
 
 // Setup router
 apiRouter(app);

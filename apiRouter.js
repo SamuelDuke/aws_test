@@ -2,9 +2,15 @@ const express = require('express');
 
 module.exports = (app) => {
     const apiRoutes = express.Router();
+    const userRoutes = express.Router();
 
     const ApiController = require('./controllers/api');
-    apiRoutes.get('/', ApiController.sendInfo);
+    const UserController = require('./controllers/user');
 
-    app.use('/', apiRoutes);
+    userRoutes.post('/', UserController.registerUser);
+    userRoutes.get('/', UserController.getAllUsers);
+
+    apiRoutes.use('/users', userRoutes);
+
+    app.use('/api', apiRoutes);
 };
