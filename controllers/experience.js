@@ -7,6 +7,8 @@ exports.createExperience = (req, res, next) => {
     const description = req.body.description;
     const creator = User.getUserByName(req.body.creator);
 
+    console.log('createExperience was called ', title, description, creator);
+
     Experience({
         title: title,
         description: description,
@@ -17,7 +19,7 @@ exports.createExperience = (req, res, next) => {
         })
         .then(null, err => {
             if (err.code === 11000) {
-                errorMessage = email + ' is already registered in the system. Please login or use a different email.';
+                errorMessage = ' is already registered in the system. Please login or use a different email.';
                 return res.status(400).json( {userMessage: errorMessage} )
             }
         }).catch(next);
