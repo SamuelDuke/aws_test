@@ -5,7 +5,7 @@ const User = require('../data_models/user');
 exports.createExperience = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
-    const creator = User.getUserByName(req.body.creator);
+    const creator = User.getUserByName(req.body.creator)._id;
 
     console.log('createExperience was called ', title, description, creator);
 
