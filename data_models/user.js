@@ -34,7 +34,7 @@ UserSchema.pre('save', function(next) {
 });
 
 UserSchema.statics.getUserByName = function(name) {
-    this.find({firstName: name}, (err, user) => {return user});
+    this.find({firstName: name}, (err, user) => {console.log('Ther user with name', name, 'is', user); return user});
 };
 
 module.exports = mongoose.model('User', UserSchema);
