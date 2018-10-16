@@ -1,4 +1,5 @@
-// npm install --save express body-parser mongoose passport bcrypt-nodejs jsonwebtoken passport-jwt cors
+// npm install --save express body-parser mongoose passport bcrypt-nodejs
+// https://cloud.mongodb.com/v2/5bc50287553855119451d8c5#clusters
 
 const express = require('express');
 const mongoose = require('mongoose');
