@@ -50,3 +50,24 @@ exports.getAllUsers = (req, res, next) => {
             return next(err)
         });
 };
+
+exports.postNewFriend = (req, res, next) => {
+    const friend_id = req.body.friend_id;
+    req.user.update({$addToSet: {friends: friend_id}}).exec()
+        .then(user => {
+            return res.status(200).json({success: true, data: user.friends});
+        })
+        .then(null, err => {
+            return next(err)
+        });
+};
+
+exports.getFriends = (req, res, next) => {
+    req.user.populate('friends', 'firstName lastName').execPopulate()
+        .then(userWithFriends => {
+            return res.status(200).json({success: true, data: req.user});
+        })
+        .then(null, err => {
+            return next(err)
+        });
+};
