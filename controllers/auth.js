@@ -29,7 +29,7 @@ exports.registerUser = (req, res, next) => {
     if (password !== verifyPassword) { errorMessage = 'The password did not match the verified password.' }
 
     if (errorMessage !== '') {
-        return res.status(400).json({ success: false, data: errorMessage })
+        return res.status(400).json({ success: false, err: errorMessage })
     }
 
     User({
@@ -41,29 +41,30 @@ exports.registerUser = (req, res, next) => {
         .then(user => {
             const userToSend = user.infoToSend();
             const token = 'Bearer ' + generateToken(userToSend);
-            return res.status(201).json({ success: true, data: { user: userToSend, token: token }});
+            return res.status(201).json({ success: true, user: userToSend, token: token });
         })
         .then(null, err => {
             if (err.code === 11000) {
                 errorMessage = email + ' is already registered in the system. Please login or use a different email.';
-                return res.status(400).json({ success: false, data: errorMessage })
+                return res.status(400).json({ success: false, err: errorMessage })
             }
         }).catch(next);
 };
 
 exports.login = (req, res, next) => {
-
+    console.log('req.body: ', req.body);
     User.findOne({email: req.body.email}).exec()
         .then(user => {
+            console.log('user: ', user);
             if (user === null) {
-                res.status(422).json({success: false, data: 'That is not a valued email.'});
+                return res.status(422).json({success: false, err: 'That is not a valued email.'});
             }
             if (user.validPassword(req.body.password)) {
                 const userToSend = user.infoToSend();
                 const token = 'Bearer ' + generateToken(userToSend);
-                res.status(200).json({success: true, data: {user: userToSend, token: token}});
+                return res.status(200).json({success: true, user: userToSend, token: token});
             } else {
-                res.status(401).json({success: false, data: 'The password was not entered correctly'});
+                return res.status(401).json({success: false, err: 'The password was not entered correctly'});
             }
         }).then(null, err => { return next(err); })
 };

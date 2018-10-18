@@ -53,7 +53,7 @@ exports.getAllUsers = (req, res, next) => {
 
 exports.postNewFriend = (req, res, next) => {
     const friend_id = req.body.friend_id;
-    req.user.update({$addToSet: {friends: friend_id}}).exec()
+    req.user.updateOne({$addToSet: {friends: friend_id}}).exec()
         .then(user => {
             return res.status(200).json({success: true, data: user.friends});
         })
