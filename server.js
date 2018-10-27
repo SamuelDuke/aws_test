@@ -15,7 +15,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('useCreateIndex', true);
 
 // Database Setup
-mongoose.connection.openUri(configMain.database, {useNewUrlParser: true});
+mongoose.connection.openUri(configMain.database, {useNewUrlParser: true, useFindAndModify: false}).catch(err => {console.log(err)});
 
 // Setup middleware for all Express requests
 app.use(bodyParser.urlencoded({extended: true}));

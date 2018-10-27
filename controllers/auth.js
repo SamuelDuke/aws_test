@@ -67,4 +67,5 @@ exports.login = (req, res, next) => {
                 return res.status(401).json({success: false, err: 'The password was not entered correctly'});
             }
         }).then(null, err => { return next(err); })
+        .catch(err => next(err));
 };

@@ -8,7 +8,10 @@ const ExperienceSchema = new Schema({
     title: {type: String, required: true},
     description: {type: String},
     coverPhoto: {type: String},
-    allPhotos: {type: String}
+    allPhotos: [{type: String}],
+    public: {type: Boolean, default: true},
+    accomplished: {type: Boolean, default: false},
+    invited: [{ type : Schema.Types.ObjectId, ref: 'User' }],
 });
 
 // // info to send

@@ -48,7 +48,8 @@ exports.getAllUsers = (req, res, next) => {
         })
         .then(null, err => {
             return next(err)
-        });
+        })
+        .catch(err => next(err));
 };
 
 exports.postNewFriend = (req, res, next) => {
@@ -59,7 +60,8 @@ exports.postNewFriend = (req, res, next) => {
         })
         .then(null, err => {
             return next(err)
-        });
+        })
+        .catch(err => next(err));
 };
 
 exports.getFriends = (req, res, next) => {
@@ -69,5 +71,6 @@ exports.getFriends = (req, res, next) => {
         })
         .then(null, err => {
             return next(err)
-        });
+        })
+        .catch(err => next(err));
 };

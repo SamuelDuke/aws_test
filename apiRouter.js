@@ -36,6 +36,8 @@ module.exports = (app) => {
     // Experiences Routes
     experienceRoutes.post('/', ExperienceController.createExperience);
     experienceRoutes.get('/', ExperienceController.getUserExperiences);
+    experienceRoutes.get('/all', ExperienceController.getAllExperiences);
+    experienceRoutes.post('/join', ExperienceController.joinExperiences);
 
 
     // Wire up the different Routes

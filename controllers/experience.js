@@ -10,7 +10,8 @@ exports.createExperience = (req, res, next) => {
     Experience({
         title: title,
         description: description,
-        creator: creator
+        creator: creator,
+        members: [creator]
     }).save()
         .then(experience => {
             return res.status(201).json({ success: true, data: {experience: experience}})
@@ -24,7 +25,10 @@ exports.createExperience = (req, res, next) => {
 };
 
 exports.getUserExperiences = (req, res, next) => {
-    Experience.find({creator: req.user}).exec()
+    Experience.find({creator: req.user})
+        .populate('creator', 'firstName lastName')
+        .populate({path: 'members'}, 'firstName lastName')
+        .exec()
         .then(userExperiences => {
             return res.status(200).json({success: true, data: userExperiences});
         })
@@ -33,12 +37,26 @@ exports.getUserExperiences = (req, res, next) => {
 
 exports.getAllExperiences = (req, res, next) => {
 
-    Experience.find().exec()
+    Experience.find()
+        .populate('creator', 'firstName lastName')
+        .populate('members', 'firstName lastName')
+        .exec()
         .then(experiences => {
-
-            return res.status(200).send(experiences)
+            return res.status(200).json({success: true, data: experiences});
         })
         .then(null, err => {
             return next(err)
-        });
+        })
+        .catch(err => next(err));
+};
+
+exports.joinExperiences = (req, res, next) => {
+
+    Experience.findOneAndUpdate(
+        { _id: req.body.experienceID },
+        { $addToSet: { members: req.user  } }).exec()
+        .then(() => {
+            return res.status(200).json({success: true});
+        })
+        .catch(err => next(err));
 };
