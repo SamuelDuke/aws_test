@@ -19,7 +19,7 @@ exports.test = (req, res, next) => {
     // Set photo as the active profile photo
     req.user.activeProfilePhoto = photoUri;
 
-    req.user.save().exec()
+    req.user.save()
         .then(data => {
             return res.send(data)
         })
