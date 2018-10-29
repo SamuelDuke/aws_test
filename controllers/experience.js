@@ -27,7 +27,7 @@ exports.createExperience = (req, res, next) => {
 exports.getUserExperiences = (req, res, next) => {
     Experience.find({creator: req.user})
         .populate('creator', 'firstName lastName')
-        .populate({path: 'members'}, 'firstName lastName')
+        .populate({path: 'members', select: 'firstName lastName' })
         .exec()
         .then(userExperiences => {
             return res.status(200).json({success: true, data: userExperiences});
@@ -38,8 +38,8 @@ exports.getUserExperiences = (req, res, next) => {
 exports.getAllExperiences = (req, res, next) => {
 
     Experience.find()
-        .populate({ path: 'creator', select: 'firstName lastName'})
-        .populate('members', 'firstName lastName')
+        .populate({ path: 'creator', select: 'firstName lastName activeProfilePhoto' })
+        .populate({ path: 'members', select: 'firstName lastName' })
         .then(experiences => {
             return res.status(200).json({success: true, data: experiences});
         })

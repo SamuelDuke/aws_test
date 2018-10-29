@@ -7,7 +7,9 @@ const UserSchema = new Schema({
     lastName: {type: String, required: [true, 'You must submit a last name.']},
     email: {type: String, required: [true, 'You must submit an email.'], unique: true},
     password: {type: String, required: [true, 'You must submit a last name.']},
-    friends: [{ type : Schema.Types.ObjectId, ref: 'User' }]
+    friends: [{ type : Schema.Types.ObjectId, ref: 'User' }],
+    activeProfilePhoto: {type: String},
+    allProfilePhotos: [{type: String}],
 });
 
 // info to send
