@@ -22,11 +22,11 @@ exports.uploadImage = (req, res, next) => {
 
     // add new profilePhoto object to the array
     req.user.allProfilePhotos.push(
-        `${rootPath}/api/image/imagePath/${fileName}`
+        `${rootPath}/image/imagePath/${fileName}`
     );
 
     // Set photo as the active profile photo
-    req.user.activeProfilePhoto = `${rootPath}/api/image/imagePath/${fileName}`;
+    req.user.activeProfilePhoto = `${rootPath}/image/imagePath/${fileName}`;
 
     // Save and respond with updated user
     req.user.save((err) => {
