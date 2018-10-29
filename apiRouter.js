@@ -64,6 +64,7 @@ module.exports = (app) => {
 
     // Protected Routes
     app.use('/api', requireAuth, apiRoutes);
+    app.use('/image', imageRoutes);
     apiRoutes.use('/users', userRoutes);
     apiRoutes.use('/image', imageRoutes);
     apiRoutes.use('/experience', experienceRoutes);
