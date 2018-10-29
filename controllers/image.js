@@ -12,7 +12,7 @@ exports.test = (req, res, next) => {
     const fileName = `${req.user._id}-${Date.now()}.jpg`;
     const filePath = req.file.path;
 
-    async getPhoto => {
+    const run = async getPhoto => {
         try {
             console.log('Started');
             const photoUri = await uploadPhoto.upload(fileName, filePath);
@@ -37,6 +37,7 @@ exports.test = (req, res, next) => {
             console.log(error.message);
         }
     };
+    run();
     // // add new profilePhoto object to the array
     // req.user.allProfilePhotos.push(photoUri);
     // // Set photo as the active profile photo
