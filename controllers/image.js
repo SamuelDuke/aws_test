@@ -14,7 +14,10 @@ exports.test = (req, res, next) => {
 
     async getPhoto => {
         try {
+            console.log('Started');
             const photoUri = await uploadPhoto.upload(fileName, filePath);
+
+            console.log('photoUri', photoUri);
 
             // add new profilePhoto object to the array
             req.user.allProfilePhotos.push(photoUri);
@@ -23,11 +26,11 @@ exports.test = (req, res, next) => {
 
             req.user.save()
                 .then(data => {
-                    return res.send(data)
+                    return data;
                 })
                 .catch(err => {
                     console.log(err);
-                    return res.send(err)
+                    err
                 })
         } catch (error) {
             // Error retrieving data
