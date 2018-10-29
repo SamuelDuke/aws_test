@@ -109,5 +109,7 @@ exports.createExperienceImage = (req, res, next) => {
 };
 
 exports.deleteAllExperences = (req, res, next) => {
-    User.deleteMany({}, () => {return res});
+    Experience.deleteMany({}, () => {
+        User.deleteMany({}, () => {return res.send('done')});
+    })
 };
