@@ -12,7 +12,9 @@ module.exports = {
             if (err) {
                 return 'There was an error trying to save the image to the server';
             } else {
-                return `${rootPath}/image/imagePath/${fileName}`
+                const path = `${rootPath}/image/imagePath/${fileName}`;
+                console.log(path);
+                return path
             }
         });
 
