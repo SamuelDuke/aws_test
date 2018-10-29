@@ -12,27 +12,41 @@ exports.test = (req, res, next) => {
     const fileName = `${req.user._id}-${Date.now()}.jpg`;
     const filePath = req.file.path;
 
-    const photoUri = async getPhoto => {
+    async getPhoto => {
         try {
-            return a = await uploadPhoto.upload(fileName, filePath);
+            const photoUri = await uploadPhoto.upload(fileName, filePath);
+
+            // add new profilePhoto object to the array
+            req.user.allProfilePhotos.push(photoUri);
+            // Set photo as the active profile photo
+            req.user.activeProfilePhoto = photoUri;
+
+            req.user.save()
+                .then(data => {
+                    return res.send(data)
+                })
+                .catch(err => {
+                    console.log(err);
+                    return res.send(err)
+                })
         } catch (error) {
             // Error retrieving data
             console.log(error.message);
         }
     };
-    // add new profilePhoto object to the array
-    req.user.allProfilePhotos.push(photoUri);
-    // Set photo as the active profile photo
-    req.user.activeProfilePhoto = photoUri;
-
-    req.user.save()
-        .then(data => {
-            return res.send(data)
-        })
-        .catch(err => {
-            console.log(err);
-            return res.send(err)
-        })
+    // // add new profilePhoto object to the array
+    // req.user.allProfilePhotos.push(photoUri);
+    // // Set photo as the active profile photo
+    // req.user.activeProfilePhoto = photoUri;
+    //
+    // req.user.save()
+    //     .then(data => {
+    //         return res.send(data)
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    //         return res.send(err)
+    //     })
 };
 
 exports.uploadImage = (req, res, next) => {
