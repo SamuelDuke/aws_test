@@ -35,7 +35,7 @@ module.exports = (app) => {
 
     // Auth Routes
     authRoutes.post('/login', AuthController.login);
-    authRoutes.post('/register', AuthController.registerUser);
+    authRoutes.post('/register', uploadFile, AuthController.registerUser);
 
 
     // User Routes
@@ -45,7 +45,7 @@ module.exports = (app) => {
     userRoutes.get('/friends', UserController.getFriends);
 
     // Experiences Routes
-    experienceRoutes.post('/', uploadFile, ExperienceController.createExperience);
+    experienceRoutes.post('/', uploadFile, ExperienceController.createExperienceImage);
     experienceRoutes.get('/', ExperienceController.getUserExperiences);
     experienceRoutes.get('/all', ExperienceController.getAllExperiences);
     experienceRoutes.post('/join', ExperienceController.joinExperiences);

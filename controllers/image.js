@@ -6,19 +6,13 @@ const configMain = require('../config/main');
 
 const rootPath = 'http://54.69.223.221:8080';
 
-const uploadPhoto = require('../config/uploadPhoto');
+const image = require('../config/image');
 
 exports.test = (req, res, next) => {
     const fileName = `${req.user._id}-${Date.now()}.jpg`;
     const filePath = req.file.path;
-
-    const run = async getPhoto => {
-        try {
-            console.log('Started');
-            const photoUri = await uploadPhoto.upload(fileName, filePath);
-
-            console.log('photoUri', photoUri);
-
+    image.upload(fileName, filePath)
+        .then( photoUri => {
             // add new profilePhoto object to the array
             req.user.allProfilePhotos.push(photoUri);
             // Set photo as the active profile photo
@@ -26,31 +20,13 @@ exports.test = (req, res, next) => {
 
             req.user.save()
                 .then(data => {
-                    return data;
+                    return res.send(data);
                 })
                 .catch(err => {
                     console.log(err);
-                    err
-                })
-        } catch (error) {
-            // Error retrieving data
-            console.log(error.message);
-        }
-    };
-    run();
-    // // add new profilePhoto object to the array
-    // req.user.allProfilePhotos.push(photoUri);
-    // // Set photo as the active profile photo
-    // req.user.activeProfilePhoto = photoUri;
-    //
-    // req.user.save()
-    //     .then(data => {
-    //         return res.send(data)
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         return res.send(err)
-    //     })
+                    return err
+                });
+        });
 };
 
 exports.uploadImage = (req, res, next) => {
@@ -63,7 +39,7 @@ exports.uploadImage = (req, res, next) => {
     // renaming real file
     fs.rename(req.file.path, target_path, function (err) {
         if (err) {
-            configMain.response(res, 500, 'error','There was an error trying to save the image to the server', null, err);
+            configMain.response(res, 500, 'error', 'There was an error trying to save the image to the server', null, err);
         }
     });
 
@@ -78,17 +54,17 @@ exports.uploadImage = (req, res, next) => {
     // Save and respond with updated user
     req.user.save((err) => {
         if (err) {
-            configMain.response(res, 500, 'error','There was an error trying update user', null, err);
+            configMain.response(res, 500, 'error', 'There was an error trying update user', null, err);
         }
-        configMain.response(res, 200, 'success','Updated User', req.user, null);
+        configMain.response(res, 200, 'success', 'Updated User', req.user, null);
     });
 };
 
-exports.getProfilePhoto = (req,res,next) => {
+exports.getProfilePhoto = (req, res, next) => {
     configMain.response(res, 200, 'success', 'Active profile photo.', req.user.activeProfilePhoto, null);
 };
 
-exports.getAllProfilePhotos = (req,res,next) => {
+exports.getAllProfilePhotos = (req, res, next) => {
     configMain.response(res, 200, 'success', 'All profile photos.', req.user.allProfilePhotos, null);
 };
 

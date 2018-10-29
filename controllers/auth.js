@@ -32,23 +32,33 @@ exports.registerUser = (req, res, next) => {
         return res.status(400).json({ success: false, err: errorMessage })
     }
 
-    User({
-        firstName: firstName,
-        lastName: lastName,
-        password: password,
-        email: email
-    }).save()
-        .then(user => {
-            const userToSend = user.infoToSend();
-            const token = 'Bearer ' + generateToken(userToSend);
-            return res.status(201).json({ success: true, user: userToSend, token: token });
+    const image = require('../config/image');
+    const fileName = `first-${Date.now()}.jpg`;
+    const filePath = req.file.path;
+
+    image.upload(fileName, filePath)
+        .then(imageUri => {
+            User({
+                firstName: firstName,
+                lastName: lastName,
+                password: password,
+                email: email,
+                activeProfilePhoto: imageUri,
+                allProfilePhotos: [imageUri]
+            }).save()
+                .then(user => {
+                    const userToSend = user.infoToSend();
+                    const token = 'Bearer ' + generateToken(userToSend);
+                    return res.status(201).json({ success: true, user: userToSend, token: token });
+                })
+                .then(null, err => {
+                    if (err.code === 11000) {
+                        errorMessage = email + ' is already registered in the system. Please login or use a different email.';
+                        return res.status(400).json({ success: false, err: errorMessage })
+                    }
+                }).catch(next);
         })
-        .then(null, err => {
-            if (err.code === 11000) {
-                errorMessage = email + ' is already registered in the system. Please login or use a different email.';
-                return res.status(400).json({ success: false, err: errorMessage })
-            }
-        }).catch(next);
+        .catch(next);
 };
 
 exports.login = (req, res, next) => {
