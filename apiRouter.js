@@ -53,7 +53,7 @@ module.exports = (app) => {
 
 
     // image routes
-    imageRoutes.post('/', uploadFile, ImageController.uploadImage);
+    imageRoutes.post('/', uploadFile, ImageController.test);
     imageRoutes.post('/profile', uploadFile, ImageController.uploadImage);
     imageRoutes.post('/experience', uploadFile, ImageController.uploadImage);
     imageRoutes.get('/', ImageController.getProfilePhoto);

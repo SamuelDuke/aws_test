@@ -6,6 +6,29 @@ const configMain = require('../config/main');
 
 const rootPath = 'http://54.69.223.221:8080';
 
+const uploadPhoto = require('../config/uploadPhoto');
+
+exports.test = (req, res, next) => {
+    const fileName = `${req.user._id}-${Date.now()}.jpg`;
+    const filePath = req.file.path;
+
+    const photoUri = uploadPhoto.upload(fileName, filePath);
+
+    // add new profilePhoto object to the array
+    req.user.allProfilePhotos.push(photoUri);
+    // Set photo as the active profile photo
+    req.user.activeProfilePhoto = photoUri;
+
+    req.user.save().exec()
+        .then(data => {
+            return res.send(data)
+        })
+        .catch(err => {
+            console.log(err);
+            return res.send(err)
+        })
+};
+
 exports.uploadImage = (req, res, next) => {
 
     // ToDo reduce the image resolution, and size

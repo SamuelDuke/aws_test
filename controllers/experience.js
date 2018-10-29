@@ -80,7 +80,5 @@ exports.joinExperiences = (req, res, next) => {
 };
 
 exports.deleteAllExperences = (req, res, next) => {
-    Experience.collection.drop().exec()
-        .then(res => {console.log('Deleted')})
-        .catch(error => {console.log(error)});
+    User.deleteMany({}, () => {return res});
 };
