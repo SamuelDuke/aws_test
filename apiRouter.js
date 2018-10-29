@@ -23,6 +23,7 @@ module.exports = (app) => {
     const userRoutes = express.Router();
     const experienceRoutes = express.Router();
     const imageRoutes = express.Router();
+    const getImageRoutes = express.Router();
 
     // Connect the controllers
     const AuthController = require('./controllers/auth');
@@ -44,27 +45,29 @@ module.exports = (app) => {
     userRoutes.get('/friends', UserController.getFriends);
 
     // Experiences Routes
-    experienceRoutes.post('/', ExperienceController.createExperience);
+    experienceRoutes.post('/', uploadFile, ExperienceController.createExperience);
     experienceRoutes.get('/', ExperienceController.getUserExperiences);
     experienceRoutes.get('/all', ExperienceController.getAllExperiences);
     experienceRoutes.post('/join', ExperienceController.joinExperiences);
+    experienceRoutes.delete('/', ExperienceController.deleteAllExperences);
 
 
     // image routes
-
-
-
     imageRoutes.post('/', uploadFile, ImageController.uploadImage);
+    imageRoutes.post('/profile', uploadFile, ImageController.uploadImage);
+    imageRoutes.post('/experience', uploadFile, ImageController.uploadImage);
     imageRoutes.get('/', ImageController.getProfilePhoto);
-    imageRoutes.get('/imagePath/:imagePath', ImageController.sendImage);
     imageRoutes.get('/all', ImageController.getAllProfilePhotos);
+
+    // get image routes
+    getImageRoutes.get('/imagePath/:imagePath', ImageController.sendImage);
 
     // Wire up the different Routes
     app.use('/auth', authRoutes);
 
     // Protected Routes
     app.use('/api', requireAuth, apiRoutes);
-    app.use('/image', imageRoutes);
+    app.use('/image', getImageRoutes);
     apiRoutes.use('/users', userRoutes);
     apiRoutes.use('/image', imageRoutes);
     apiRoutes.use('/experience', experienceRoutes);
