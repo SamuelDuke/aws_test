@@ -63,6 +63,7 @@ exports.joinExperiences = (req, res, next) => {
 
 const image = require('../config/image');
 exports.createExperienceImage = (req, res, next) => {
+    console.log('This is the req form expo',req);
     const title = req.body.title;
     const description = req.body.description;
     const creator = req.user;
@@ -79,6 +80,7 @@ exports.createExperienceImage = (req, res, next) => {
                 members: [creator]
             }).save()
                 .then(experience => {
+
                     return res.status(201).json({ success: true, data: {experience: experience}})
                 })
                 .then(null, err => {
