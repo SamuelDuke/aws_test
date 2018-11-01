@@ -5,6 +5,7 @@ module.exports = {
     jwtSecret: 'I Love Erica!!!!',
     jwtExpiration: 1000000,
     uploadProfilePhotoFormKey: 'file',
+    rootPath: 'http://54.69.223.221:8080',
 
     response: (res, httpStatus, status, message, data, err) => {
         res.status(httpStatus).json({

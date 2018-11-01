@@ -31,6 +31,7 @@ exports.registerUser = (req, res, next) => {
     if (errorMessage !== '') {
         return res.status(400).json({ success: false, err: errorMessage })
     }
+    console.log('req.file', req);
 
     const image = require('../config/image');
     const fileName = `first-${Date.now()}.jpg`;

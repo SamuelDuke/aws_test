@@ -61,14 +61,15 @@ exports.joinExperiences = (req, res, next) => {
         .catch(err => next(err));
 };
 
-const image = require('../config/image');
 exports.createExperienceImage = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
     const creator = req.user;
 
+    const image = require('../config/image');
     const fileName = `${req.user._id}-${Date.now()}.jpg`;
     const filePath = req.file.path;
+
     image.upload(fileName, filePath)
         .then( imageUri => {
             Experience({
@@ -77,37 +78,20 @@ exports.createExperienceImage = (req, res, next) => {
                 creator: creator,
                 coverPhoto: imageUri,
                 members: [creator]
+
             }).save()
                 .then(experience => {
                     console.log('I am the experience', experience);
-
                     return res.status(201).json({ success: true, data: {experience: experience}})
                 })
                 .then(null, err => {
                     if (err.code === 11000) {
-                        errorMessage = ' is already registered in the system. Please login or use a different email.';
+                        const errorMessage = ' is already registered in the system. Please login or use a different email.';
                         return res.status(400).json( {success: false, data: errorMessage} )
                     }
                 }).catch(next);
         })
         .catch(next);
-
-    // Experience({
-    //     title: title,
-    //     description: description,
-    //     creator: creator,
-    //     coverPhoto: coverPhoto,
-    //     members: [creator]
-    // }).save()
-    //     .then(experience => {
-    //         return res.status(201).json({ success: true, data: {experience: experience}})
-    //     })
-    //     .then(null, err => {
-    //         if (err.code === 11000) {
-    //             errorMessage = ' is already registered in the system. Please login or use a different email.';
-    //             return res.status(400).json( {success: false, data: errorMessage} )
-    //         }
-    //     }).catch(next);
 };
 
 exports.deleteAllExperences = (req, res, next) => {

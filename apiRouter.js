@@ -4,11 +4,9 @@ const passport = require('passport');
 const passportStrategy = require('./config/passport');
 const requireAuth = passport.authenticate('jwt', { session: false });
 
-const multer  = require('multer');
-
 const configMain = require('./config/main');
 
-
+const multer  = require('multer');
 const uploadFile = multer({ dest: 'uploads/'}).single(configMain.uploadProfilePhotoFormKey);
 
 
